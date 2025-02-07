@@ -43,19 +43,18 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-card">
-      <div className="auth-card-header">
-        <h2 className="text-xl font-semibold text-gray-900 text-center">
+    <div className="min-h-screen flex items-start justify-center  bg-[#D3D9D4]">
+      <div className="bg-[#F6F4F0] p-8 rounded-xl shadow-lg border border-[#2E5077] w-full max-w-md">
+        <h2 className="text-2xl font-semibold text-[#2E5077] text-center mb-4">
           Login to EaseLogi
         </h2>
-      </div>
-      <div className="auth-card-body">
+
         <form onSubmit={handleLogin}>
           <div className="space-y-4">
             <div>
-              <label className="form-label">Select Role</label>
+              <label className="block text-[#2E5077] font-medium">Select Role</label>
               <select
-                className="form-input"
+                className="w-full p-2 border border-[#2E5077] rounded-lg bg-white text-[#2E5077]"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
                 required
@@ -67,10 +66,10 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="form-label">Email</label>
+              <label className="block text-[#2E5077] font-medium">Email</label>
               <input
                 type="email"
-                className="form-input"
+                className="w-full p-2 border border-[#2E5077] rounded-lg bg-white text-[#2E5077]"
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -79,10 +78,10 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="form-label">Password</label>
+              <label className="block text-[#2E5077] font-medium">Password</label>
               <input
                 type="password"
-                className="form-input"
+                className="w-full p-2 border border-[#2E5077] rounded-lg bg-white text-[#2E5077]"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -90,23 +89,23 @@ const Login = () => {
               />
             </div>
 
-            {error && <p className="input-error">{error}</p>}
+            {error && <p className="text-red-600 text-sm">{error}</p>}
 
             <div className="flex justify-end mt-2">
-              <Link to="/auth/forgot-password" className="text-blue-600 text-sm hover:underline">
+              <Link to="/auth/forgot-password" className="text-[#4DA1A9] text-sm hover:underline">
                 Forgot password?
               </Link>
             </div>
 
-            <button type="submit" className="btn-primary mt-4 w-full">
+            <button type="submit" className="w-full p-3 bg-[#4DA1A9] hover:bg-[#79D7BE] text-white font-semibold rounded-lg transition duration-300">
               Login
             </button>
           </div>
         </form>
 
         <div className="text-center mt-4">
-          <span className="text-gray-600">Don't have an account? </span>
-          <Link to="/auth/signup" className="text-blue-600 font-medium hover:underline">
+          <span className="text-[#2E5077]">Don't have an account? </span>
+          <Link to="/auth/signup" className="text-[#4DA1A9] font-medium hover:underline">
             Sign up here
           </Link>
         </div>
