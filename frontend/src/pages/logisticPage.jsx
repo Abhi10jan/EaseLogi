@@ -13,13 +13,13 @@ const LogisticPage = () => {
             <h1 className="text-3xl font-extrabold text-white tracking-wide drop-shadow-lg">EaseLogi</h1>
           </div>
           <div className="flex space-x-4">
-            <Link to="/logidashboard/logistic" className="px-5 py-2 bg-[#79D7BE] text-[#2E5077] font-semibold rounded-lg shadow-md hover:bg-opacity-80 transition">
+            <Link to="/logidashboard/logistic" className="px-5 py-2 bg-[#79D7BE] text-[#2E5077] font-semibold rounded-lg shadow-md hover:bg-[#4DA1A9] transition duration-300">
               Home
             </Link>
-            <Link to="/logidashboard/logiprofile" className="px-5 py-2 bg-[#79D7BE] text-[#2E5077] font-semibold rounded-lg shadow-md hover:bg-opacity-80 transition">
+            <Link to="/logidashboard/logiprofile" className="px-5 py-2 bg-[#79D7BE] text-[#2E5077] font-semibold rounded-lg shadow-md hover:bg-[#4DA1A9] transition duration-300">
               Profile
             </Link>
-            <Link to="/logidashboard/logihelp" className="px-5 py-2 bg-[#79D7BE] text-[#2E5077] font-semibold rounded-lg shadow-md hover:bg-opacity-80 transition">
+            <Link to="/logidashboard/logihelp" className="px-5 py-2 bg-[#79D7BE] text-[#2E5077] font-semibold rounded-lg shadow-md hover:bg-[#4DA1A9] transition duration-300">
               Help
             </Link>
           </div>

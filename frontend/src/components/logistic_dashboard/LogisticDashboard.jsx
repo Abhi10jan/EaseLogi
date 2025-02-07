@@ -12,11 +12,12 @@ const LogisticsDashboard = () => {
   const [trackingInfo, setTrackingInfo] = useState({});
   const [activeTab, setActiveTab] = useState("loads");
 
-  const loads = [
+  // Convert loads into state so we can remove items dynamically
+  const [loads, setLoads] = useState([
     { route: "Mumbai → Delhi", price: 45000 },
     { route: "Bangalore → Chennai", price: 28000 },
     { route: "Pune → Hyderabad", price: 32000 },
-  ];
+  ]);
 
   const filteredLoads = loads
     .filter((load) => load.route.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -37,12 +38,34 @@ const LogisticsDashboard = () => {
       setErrors({ ...errors, [index]: "Please enter a valid amount." });
       return;
     }
-    const newBid = { route: filteredLoads[index].route, amount: bids[index], status: "Pending" };
-    setBidHistory([...bidHistory, newBid]);
-    setConfirmation({ ...confirmation, [index]: `Bid submitted for ${filteredLoads[index].route}: ₹${bids[index]}` });
+  
+    // Find the correct load by matching the route from filteredLoads
+    const correctLoad = loads.find((load) => load.route === filteredLoads[index].route);
+  
+    if (!correctLoad) {
+      setErrors({ ...errors, [index]: "Load not found." });
+      return;
+    }
+  
+    // Create new bid object
+    const newBid = { route: correctLoad.route, amount: bids[index], status: "Pending" };
+  
+    // Remove the correct load from available loads
+    setLoads((prevLoads) => prevLoads.filter((load) => load.route !== correctLoad.route));
+  
+    // Update bid history correctly
+    setBidHistory((prevBids) => [...prevBids, newBid]);
+  
+    // Clear confirmation for previously submitted bids
+    setConfirmation({ ...confirmation, [index]: `Bid submitted for ${correctLoad.route}: ₹${bids[index]}` });
+  
+    // Mark the bid as submitted
     setSubmittedBids({ ...submittedBids, [index]: true });
+  
+    // Reset input field
+    setBids({ ...bids, [index]: "" });
   };
-
+  
   const handleTrackShipment = (index) => {
     const locations = ["Warehouse", "On the way", "Arriving Soon", "Delivered"];
     let currentLocation = 0;
