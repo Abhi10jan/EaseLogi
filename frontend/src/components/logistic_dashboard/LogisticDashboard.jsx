@@ -9,6 +9,8 @@ const LogisticsDashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("route");
   const [bidHistory, setBidHistory] = useState([]);
+  const [trackingInfo, setTrackingInfo] = useState({});
+  const [activeTab, setActiveTab] = useState("loads");
 
   const loads = [
     { route: "Mumbai → Delhi", price: 45000 },
@@ -19,12 +21,6 @@ const LogisticsDashboard = () => {
   const filteredLoads = loads
     .filter((load) => load.route.toLowerCase().includes(searchQuery.toLowerCase()))
     .sort((a, b) => (sortBy === "price" ? a.price - b.price : a.route.localeCompare(b.route)));
-
-  const metrics = [
-    { label: "On-Time Delivery", value: "94%" },
-    { label: "Customer Rating", value: "4.8/5" },
-    { label: "Revenue This Month", value: "₹2,45,000" },
-  ];
 
   const handleBidClick = (index) => {
     setShowInput(showInput === index ? null : index);
@@ -47,76 +43,135 @@ const LogisticsDashboard = () => {
     setSubmittedBids({ ...submittedBids, [index]: true });
   };
 
+  const handleTrackShipment = (index) => {
+    const locations = ["Warehouse", "On the way", "Arriving Soon", "Delivered"];
+    let currentLocation = 0;
+
+    const interval = setInterval(() => {
+      setTrackingInfo((prev) => ({
+        ...prev,
+        [index]: locations[currentLocation],
+      }));
+      if (currentLocation === locations.length - 1) clearInterval(interval);
+      currentLocation++;
+    }, 2000);
+  };
+
   return (
-    <div className="flex flex-col md:flex-row gap-6 p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-screen">
+      {/* Navigation Tabs */}
+      <div className="flex space-x-4 border-b mb-4">
+        <button
+          className={`px-4 py-2 ${activeTab === "loads" ? "border-b-2 border-blue-500 font-bold" : ""}`}
+          onClick={() => setActiveTab("loads")}
+        >
+          Available Loads
+        </button>
+        <button
+          className={`px-4 py-2 ${activeTab === "bids" ? "border-b-2 border-blue-500 font-bold" : ""}`}
+          onClick={() => setActiveTab("bids")}
+        >
+          Bid History
+        </button>
+        <button
+          className={`px-4 py-2 ${activeTab === "shipments" ? "border-b-2 border-blue-500 font-bold" : ""}`}
+          onClick={() => setActiveTab("shipments")}
+        >
+          Active Shipments
+        </button>
+      </div>
+
       {/* Available Loads */}
-      <div className="bg-white p-6 rounded-2xl shadow-lg w-full md:w-1/2">
-        <h2 className="text-lg font-semibold mb-4">Available Loads</h2>
-        <input
-          type="text"
-          placeholder="Search loads..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 border rounded-lg w-full mb-4"
-        />
-        <select onChange={(e) => setSortBy(e.target.value)} className="p-2 border rounded-lg mb-4">
-          <option value="route">Sort by Route</option>
-          <option value="price">Sort by Price</option>
-        </select>
-        <div className="space-y-4">
-          {filteredLoads.map((load, index) => (
-            <div key={index} className="bg-gray-100 p-4 rounded-lg flex flex-col items-start">
-              <div className="w-full flex justify-between items-center">
-                <div>
-                  <p className="text-md font-medium">{load.route}</p>
-                  <p className="text-lg font-bold">₹{load.price.toLocaleString()}</p>
-                </div>
-                <button 
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+      {activeTab === "loads" && (
+        <div className="bg-white p-6 rounded-2xl shadow-lg">
+          <h2 className="text-lg font-semibold mb-4">Available Loads</h2>
+          <input
+            type="text"
+            placeholder="Search loads..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="p-2 border rounded-lg w-full mb-4"
+          />
+          <div className="space-y-4">
+            {filteredLoads.map((load, index) => (
+              <div key={index} className="bg-gray-100 p-4 rounded-lg">
+                <p className="text-md font-medium">{load.route}</p>
+                <p className="text-lg font-bold">₹{load.price.toLocaleString()}</p>
+                <button
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 mt-2"
                   onClick={() => handleBidClick(index)}
                 >
                   Bid Now
                 </button>
+                {showInput === index && (
+                  <div className="mt-2 flex flex-col">
+                    <input
+                      type="text"
+                      placeholder="Enter your bid"
+                      value={bids[index] || ""}
+                      onChange={(event) => handleInputChange(event, index)}
+                      className="p-2 border rounded-lg"
+                    />
+                    <button
+                      className="px-4 py-2 mt-2 bg-green-600 hover:bg-green-700 text-white rounded-lg"
+                      onClick={() => handleSubmitBid(index)}
+                    >
+                      Submit
+                    </button>
+                    {confirmation[index] && <p className="text-green-500 text-sm mt-1">{confirmation[index]}</p>}
+                  </div>
+                )}
               </div>
-              {showInput === index && (
-                <div className="mt-2 w-full flex flex-col">
-                  <input
-                    type="text"
-                    placeholder="Enter your bid"
-                    value={bids[index] || ""}
-                    onChange={(event) => handleInputChange(event, index)}
-                    className="p-2 border rounded-lg"
-                  />
-                  {errors[index] && <p className="text-red-500 text-sm mt-1">{errors[index]}</p>}
-                  <button
-                    className="px-4 py-2 mt-2 bg-green-600 hover:bg-green-700 text-white rounded-lg"
-                    onClick={() => handleSubmitBid(index)}
-                  >
-                    Submit
-                  </button>
-                  {confirmation[index] && <p className="text-green-500 text-sm mt-1">{confirmation[index]}</p>}
-                </div>
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Bid History */}
-      <div className="bg-white p-6 rounded-2xl shadow-lg w-full md:w-1/2">
-        <h2 className="text-lg font-semibold mb-4">Bid History</h2>
-        <div className="space-y-4">
-          {bidHistory.map((bid, index) => (
-            <div key={index} className="p-4 border rounded-lg flex justify-between">
-              <div>
+      {activeTab === "bids" && (
+        <div className="bg-white p-6 rounded-2xl shadow-lg">
+          <h2 className="text-lg font-semibold mb-4">Bid History</h2>
+          {bidHistory.length === 0 ? (
+            <p className="text-gray-500">No bids submitted yet.</p>
+          ) : (
+            bidHistory.map((bid, index) => (
+              <div key={index} className="p-4 border rounded-lg flex justify-between">
                 <p className="text-md font-medium">{bid.route}</p>
                 <p className="text-lg font-bold">₹{bid.amount}</p>
+                <p className={`text-md font-semibold ${bid.status === "Pending" ? "text-yellow-500" : "text-green-600"}`}>
+                  {bid.status}
+                </p>
               </div>
-              <p className="text-md font-semibold text-gray-700">{bid.status}</p>
-            </div>
-          ))}
+            ))
+          )}
         </div>
-      </div>
+      )}
+
+      {/* Active Shipments */}
+      {activeTab === "shipments" && (
+        <div className="bg-white p-6 rounded-2xl shadow-lg">
+          <h2 className="text-lg font-semibold mb-4">Active Shipments</h2>
+          {bidHistory.filter((bid) => bid.status === "In Transit").length === 0 ? (
+            <p className="text-gray-500">No active shipments.</p>
+          ) : (
+            bidHistory
+              .filter((bid) => bid.status === "In Transit")
+              .map((shipment, index) => (
+                <div key={index} className="p-4 border rounded-lg flex justify-between">
+                  <p className="text-md font-medium">{shipment.route}</p>
+                  <p className="text-lg font-bold">₹{shipment.amount}</p>
+                  <button
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+                    onClick={() => handleTrackShipment(index)}
+                  >
+                    Live Track
+                  </button>
+                  <p className="text-gray-700">{trackingInfo[index] || "Awaiting tracking update..."}</p>
+                </div>
+              ))
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -16,7 +16,7 @@ import LogiHelpDashboard from "./components/logistic_dashboard/HelpDashboard";
 import LogisticsDashboard from "./components/logistic_dashboard/LogisticDashboard";
 
 import AdminDashboard from "./components/admin_dashboard/AdminDashboard";
-import Messages from "./components/admin_dashboard/messages";
+import Messages from "./components/admin_dashboard/Messages";
 
 function App() {
   return (
