@@ -19,8 +19,12 @@ const LogisticsDashboard = () => {
   ];
 
   const filteredLoads = loads
-    .filter((load) => load.route.toLowerCase().includes(searchQuery.toLowerCase()))
-    .sort((a, b) => (sortBy === "price" ? a.price - b.price : a.route.localeCompare(b.route)));
+    .filter((load) =>
+      load.route.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) =>
+      sortBy === "price" ? a.price - b.price : a.route.localeCompare(b.route)
+    );
 
   const handleBidClick = (index) => {
     setShowInput(showInput === index ? null : index);
@@ -37,9 +41,16 @@ const LogisticsDashboard = () => {
       setErrors({ ...errors, [index]: "Please enter a valid amount." });
       return;
     }
-    const newBid = { route: filteredLoads[index].route, amount: bids[index], status: "Pending" };
+    const newBid = {
+      route: filteredLoads[index].route,
+      amount: bids[index],
+      status: "Pending",
+    };
     setBidHistory([...bidHistory, newBid]);
-    setConfirmation({ ...confirmation, [index]: `Bid submitted for ${filteredLoads[index].route}: ₹${bids[index]}` });
+    setConfirmation({
+      ...confirmation,
+      [index]: `Bid submitted for ${filteredLoads[index].route}: ₹${bids[index]}`,
+    });
     setSubmittedBids({ ...submittedBids, [index]: true });
   };
 
@@ -62,19 +73,27 @@ const LogisticsDashboard = () => {
       {/* Navigation Tabs */}
       <div className="flex space-x-4 border-b mb-4">
         <button
-          className={`px-4 py-2 ${activeTab === "loads" ? "border-b-2 border-blue-500 font-bold" : ""}`}
+          className={`px-4 py-2 ${
+            activeTab === "loads" ? "border-b-2 border-blue-500 font-bold" : ""
+          }`}
           onClick={() => setActiveTab("loads")}
         >
           Available Loads
         </button>
         <button
-          className={`px-4 py-2 ${activeTab === "bids" ? "border-b-2 border-blue-500 font-bold" : ""}`}
+          className={`px-4 py-2 ${
+            activeTab === "bids" ? "border-b-2 border-blue-500 font-bold" : ""
+          }`}
           onClick={() => setActiveTab("bids")}
         >
           Bid History
         </button>
         <button
-          className={`px-4 py-2 ${activeTab === "shipments" ? "border-b-2 border-blue-500 font-bold" : ""}`}
+          className={`px-4 py-2 ${
+            activeTab === "shipments"
+              ? "border-b-2 border-blue-500 font-bold"
+              : ""
+          }`}
           onClick={() => setActiveTab("shipments")}
         >
           Active Shipments
@@ -96,7 +115,9 @@ const LogisticsDashboard = () => {
             {filteredLoads.map((load, index) => (
               <div key={index} className="bg-gray-100 p-4 rounded-lg">
                 <p className="text-md font-medium">{load.route}</p>
-                <p className="text-lg font-bold">₹{load.price.toLocaleString()}</p>
+                <p className="text-lg font-bold">
+                  ₹{load.price.toLocaleString()}
+                </p>
                 <button
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 mt-2"
                   onClick={() => handleBidClick(index)}
@@ -118,7 +139,11 @@ const LogisticsDashboard = () => {
                     >
                       Submit
                     </button>
-                    {confirmation[index] && <p className="text-green-500 text-sm mt-1">{confirmation[index]}</p>}
+                    {confirmation[index] && (
+                      <p className="text-green-500 text-sm mt-1">
+                        {confirmation[index]}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -135,10 +160,19 @@ const LogisticsDashboard = () => {
             <p className="text-gray-500">No bids submitted yet.</p>
           ) : (
             bidHistory.map((bid, index) => (
-              <div key={index} className="p-4 border rounded-lg flex justify-between">
+              <div
+                key={index}
+                className="p-4 border rounded-lg flex justify-between"
+              >
                 <p className="text-md font-medium">{bid.route}</p>
                 <p className="text-lg font-bold">₹{bid.amount}</p>
-                <p className={`text-md font-semibold ${bid.status === "Pending" ? "text-yellow-500" : "text-green-600"}`}>
+                <p
+                  className={`text-md font-semibold ${
+                    bid.status === "Pending"
+                      ? "text-yellow-500"
+                      : "text-green-600"
+                  }`}
+                >
                   {bid.status}
                 </p>
               </div>
@@ -151,13 +185,17 @@ const LogisticsDashboard = () => {
       {activeTab === "shipments" && (
         <div className="bg-white p-6 rounded-2xl shadow-lg">
           <h2 className="text-lg font-semibold mb-4">Active Shipments</h2>
-          {bidHistory.filter((bid) => bid.status === "In Transit").length === 0 ? (
+          {bidHistory.filter((bid) => bid.status === "In Transit").length ===
+          0 ? (
             <p className="text-gray-500">No active shipments.</p>
           ) : (
             bidHistory
               .filter((bid) => bid.status === "In Transit")
               .map((shipment, index) => (
-                <div key={index} className="p-4 border rounded-lg flex justify-between">
+                <div
+                  key={index}
+                  className="p-4 border rounded-lg flex justify-between"
+                >
                   <p className="text-md font-medium">{shipment.route}</p>
                   <p className="text-lg font-bold">₹{shipment.amount}</p>
                   <button
@@ -166,7 +204,9 @@ const LogisticsDashboard = () => {
                   >
                     Live Track
                   </button>
-                  <p className="text-gray-700">{trackingInfo[index] || "Awaiting tracking update..."}</p>
+                  <p className="text-gray-700">
+                    {trackingInfo[index] || "Awaiting tracking update..."}
+                  </p>
                 </div>
               ))
           )}

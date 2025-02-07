@@ -1,36 +1,45 @@
 import { useState, useEffect } from "react";
-import { FaQuestionCircle, FaPhone, FaEnvelope, FaPaperPlane } from "react-icons/fa";
+import {
+  FaQuestionCircle,
+  FaPhone,
+  FaEnvelope,
+  FaPaperPlane,
+} from "react-icons/fa";
 import { getFAQs, getContactInfo, sendMessage } from "../api/help";
 
 const HelpDashboard = () => {
   const [faqs, setFaqs] = useState([]);
-  const [contact, setContact] = useState({});
+  const [contact, setContact] = useState({ phone: "", email: "" });
   const [message, setMessage] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  // Fetch FAQs and Contact Info on component mount
   useEffect(() => {
-    async function fetchData() {
-      const faqData = await getFAQs();
-      const contactData = await getContactInfo();
-      setFaqs(faqData);
-      setContact(contactData);
-    }
+    const fetchData = async () => {
+      try {
+        const [faqData, contactData] = await Promise.all([
+          getFAQs(),
+          getContactInfo(),
+        ]);
+        setFaqs(faqData);
+        setContact(contactData);
+      } catch (error) {
+        console.error("Error fetching help data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
   }, []);
 
-  // Handle sending message
   const handleSendMessage = async () => {
     if (!message.trim()) {
-      setResponseMessage("Message cannot be empty.");
+      setResponseMessage("⚠️ Message cannot be empty.");
       return;
     }
 
     try {
-      console.log("🔹 Sending message...");
-      const response = await sendMessage("user123", message); // Replace "user123" with actual user ID
-      console.log("🔹 API Response:", response);
-
+      const response = await sendMessage("user123", message); // Replace "user123" dynamically
       if (response.success) {
         setResponseMessage("✅ Your message has been sent to support!");
         setMessage("");
@@ -38,7 +47,7 @@ const HelpDashboard = () => {
         setResponseMessage("❌ Failed to send message. Try again.");
       }
     } catch (error) {
-      console.error("❌ Error in handleSendMessage:", error);
+      console.error("Error sending message:", error);
       setResponseMessage("❌ An unexpected error occurred.");
     }
   };
@@ -50,21 +59,27 @@ const HelpDashboard = () => {
       </h2>
 
       {/* FAQs Section */}
-      <h3 className="text-lg font-semibold mb-2 text-[#2E5077]">📌 Frequently Asked Questions</h3>
-      <ul className="list-disc pl-5 space-y-2 text-[#2E5077]">
-        {faqs.length > 0 ? (
-          faqs.map((faq, index) => (
-            <li key={index} className="border-l-4 border-[#4DA1A9] pl-2">
-              <strong>{faq.question}</strong> - {faq.answer}
-            </li>
-          ))
-        ) : (
-          <li>Loading FAQs...</li>
-        )}
-      </ul>
+      <h3 className="text-lg font-semibold mb-2 text-[#2E5077]">📌 FAQs</h3>
+      {loading ? (
+        <p>Loading FAQs...</p>
+      ) : (
+        <ul className="list-disc pl-5 space-y-2 text-[#2E5077]">
+          {faqs.length > 0 ? (
+            faqs.map((faq, index) => (
+              <li key={index} className="border-l-4 border-[#4DA1A9] pl-2">
+                <strong>{faq.question}</strong> - {faq.answer}
+              </li>
+            ))
+          ) : (
+            <li>No FAQs available.</li>
+          )}
+        </ul>
+      )}
 
       {/* Contact Support Section */}
-      <h3 className="text-lg font-semibold mt-6 text-[#2E5077]">📞 Contact Support</h3>
+      <h3 className="text-lg font-semibold mt-6 text-[#2E5077]">
+        📞 Contact Support
+      </h3>
       <div className="flex items-center space-x-3 text-[#2E5077]">
         <FaPhone className="text-[#4DA1A9]" />
         <span>{contact.phone || "+91 12345 67890"}</span>
@@ -75,7 +90,9 @@ const HelpDashboard = () => {
       </div>
 
       {/* Send Message Section */}
-      <h3 className="text-lg font-semibold mt-6 text-[#2E5077]">💬 Send us your question</h3>
+      <h3 className="text-lg font-semibold mt-6 text-[#2E5077]">
+        💬 Send us your question
+      </h3>
       <div className="flex mt-2">
         <input
           type="text"
