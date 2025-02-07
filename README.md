@@ -6,14 +6,14 @@ Easelogi is a [brief description of the project, e.g., "an intuitive platform fo
 
 ## 👥 Team Name
 
-[Team InnovateX]
+Team InnovateX
 
 ## 👨‍💻 Team Members
 
-- [Anishka Verma]
-- [Swati Shah] 
-- [Abhinandan Shah]
-- [Karan Dhingra] 
+- Anishka Verma
+- Swati Shah
+- Abhinandan Shah
+- Karan Dhingra
 
 ## 🛠 Tech Stack
 
