@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5000/api/help"; // Ensure this matches your backend
+const API_BASE_URL = "http://localhost:5002/api/help"; // Ensure this matches your backend
 
 // ✅ Fetch FAQs
 export const getFAQs = async () => {
