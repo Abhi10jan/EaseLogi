@@ -1,6 +1,5 @@
-const BASE_URL = "http://localhost:5000/api/auth"; // Update the URL if needed
+const BASE_URL = "http://localhost:5000/api/auth"; // Update the URL as needed
 
-// Signup User
 export const signupUser = async (userData) => {
   try {
     const response = await fetch(`${BASE_URL}/signup`, {
@@ -10,21 +9,13 @@ export const signupUser = async (userData) => {
       },
       body: JSON.stringify(userData),
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Signup failed");
-    }
-
-    return { success: true, data };
+    return await response.json();
   } catch (error) {
     console.error("Signup error:", error);
-    return { success: false, message: error.message };
+    return { success: false, message: "Signup failed" };
   }
 };
 
-// Login User
 export const loginUser = async (userData) => {
   try {
     const response = await fetch(`${BASE_URL}/login`, {
@@ -34,22 +25,9 @@ export const loginUser = async (userData) => {
       },
       body: JSON.stringify(userData),
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Login failed");
-    }
-
-    // Store token in localStorage for authenticated requests
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.role);
-    }
-
-    return { success: true, data };
+    return await response.json();
   } catch (error) {
     console.error("Login error:", error);
-    return { success: false, message: error.message };
+    return { success: false, message: "Login failed" };
   }
 };

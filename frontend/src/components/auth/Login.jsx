@@ -93,10 +93,7 @@ const Login = () => {
             {error && <p className="input-error">{error}</p>}
 
             <div className="flex justify-end mt-2">
-              <Link
-                to="/auth/forgot-password"
-                className="text-blue-600 text-sm hover:underline"
-              >
+              <Link to="/auth/forgot-password" className="text-blue-600 text-sm hover:underline">
                 Forgot password?
               </Link>
             </div>
@@ -109,10 +106,7 @@ const Login = () => {
 
         <div className="text-center mt-4">
           <span className="text-gray-600">Don't have an account? </span>
-          <Link
-            to="/auth/signup"
-            className="text-blue-600 font-medium hover:underline"
-          >
+          <Link to="/auth/signup" className="text-blue-600 font-medium hover:underline">
             Sign up here
           </Link>
         </div>

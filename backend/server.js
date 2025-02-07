@@ -2,16 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-// const msmeRoutes = require('./routes/msmeRoutes');
-// const providerRoutes = require('./routes/providerRoutes');
-// const helpRoutes = require('./routes/helproutes');
+const msmeRoutes = require("./routes/msmeRoutes");
+const providerRoutes = require("./routes/providerRoutes");
+const helpRoutes = require("./routes/helproutes");
 
 const authRoutes = require("./routes/authRoutes");
-const MONGO_URI = process.env.MONGO_URI;
-if (!MONGO_URI) {
-  console.error("Error: MONGO_URI is not defined in .env file");
-  process.exit(1); // Exit the app if no URI is found
-}
+
 const app = express();
 
 app.get("/", (req, res) => {
@@ -20,6 +16,7 @@ app.get("/", (req, res) => {
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 app.use(
   cors({
     origin: "http://localhost:5173", // Replace with your frontend origin
@@ -28,9 +25,9 @@ app.use(
 );
 // Routes
 app.use("/api/auth", authRoutes);
-// app.use('/api/msme', msmeRoutes);
-// app.use('/api/provider', providerRoutes);
-// app.use('/api/help', helpRoutes);
+app.use("/api/msme", msmeRoutes);
+app.use("/api/provider", providerRoutes);
+app.use("/api/help", helpRoutes);
 
 // Connect to MongoDB
 mongoose
