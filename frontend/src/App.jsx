@@ -4,7 +4,7 @@ import DashPage from "./pages/DashPage"; // Import DashPage here
 import LogisticPage from "./pages/logisticPage";
 import AdminPage from "./pages/AdminPage";
 import Login from "./components/auth/Login";
-import SignUp from "./components/auth/SignUp";
+import SignUp from "./components/auth/Signup";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import MSMEDashboard from "./components/dashboard/MSMEDashboard";
 import ProfileDashboard from "./components/dashboard/ProfileDashboard";
