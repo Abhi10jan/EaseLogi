@@ -14,8 +14,7 @@ import AdminProfileDashboard from "./components/admin_dashboard/ProfileDashboard
 import LogiProfileDashboard from "./components/logistic_dashboard/ProfileDashboard";
 import LogiHelpDashboard from "./components/logistic_dashboard/HelpDashboard";
 import LogisticsDashboard from "./components/logistic_dashboard/LogisticDashboard";
-
- import AdminDashboard from "./components/admin_dashboard/AdminDashboard";
+import AdminDashboard from "./components/admin_dashboard/AdminDashboard";
 
 function App() {
   return (

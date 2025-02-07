@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
 import { FaUser, FaEnvelope, FaPhone, FaBuilding, FaEdit, FaSignOutAlt } from "react-icons/fa";
 
 const ProfileDashboard = () => {
+  const navigate = useNavigate(); // Initialize navigation
+
   const [user, setUser] = useState({
     name: "John Doe",
     email: "johndoe@example.com",
@@ -20,7 +23,12 @@ const ProfileDashboard = () => {
   };
 
   const handleLogout = () => {
-    alert("Logging out..."); // Replace with actual logout logic
+    // ✅ Clear authentication data
+    localStorage.removeItem("authToken"); 
+    sessionStorage.removeItem("user");
+
+    // ✅ Redirect to login page
+    navigate("/auth/login");
   };
 
   return (
