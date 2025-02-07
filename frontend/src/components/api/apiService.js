@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5002/api/msme"; // Update with your backend URL
+const API_URL = "http://localhost:5000/api/msme"; // Update with your backend URL
 
 export const createShipment = async (shipmentData) => {
   try {
