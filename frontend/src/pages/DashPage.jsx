@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import logo from "../assets/logo.jpg";  // ✅ Make sure this path is correct
-
+import { FaEnvelope } from "react-icons/fa";
 const DashPage = () => {
   return (
     <div className="flex h-screen bg-[#F6F4F0]">
@@ -21,6 +21,9 @@ const DashPage = () => {
             </Link>
             <Link to="/dashboard/help" className="px-5 py-2 bg-[#79D7BE] text-[#2E5077] font-semibold rounded-lg shadow-md hover:bg-[#4DA1A9] transition duration-300">
               Help
+            </Link>
+            <Link to="/dashboard/msmeMessages" className="flex items-center px-5 py-2 bg-[#79D7BE] text-[#2E5077] font-semibold rounded-lg shadow-md hover:bg-[#4DA1A9] transition duration-300">
+            <FaEnvelope className="mr-0" />
             </Link>
           </div>
         </header>

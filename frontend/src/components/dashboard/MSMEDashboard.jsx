@@ -1,15 +1,29 @@
 import { useState, useEffect } from "react";
+
 import { FaTruck, FaCheckCircle, FaClock } from "react-icons/fa";
 import Card from "../ui/Card";
 import CardContent from "../ui/CardContent";
 import Button from "../ui/Button";
+import Community from "./Community";
 
 const MSMEDashboard = () => {
+  const [activeTab, setActiveTab] = useState("shipments");
   const [showForm, setShowForm] = useState(false);
-  const [shipments, setShipments] = useState([]);
-  const [pastShipments, setPastShipments] = useState([]);
-  const [loadMatches, setLoadMatches] = useState([]);
+  const [shipments, setShipments] = useState([
+    { id: "SH001", from: "Mumbai", to: "Delhi", status: "In Transit", icon: <FaTruck className="text-blue-500" /> },
+    { id: "SH002", from: "Bangalore", to: "Hyderabad", status: "Pending", icon: <FaClock className="text-yellow-500" /> },
+    { id: "SH003", from: "Pune", to: "Chennai", status: "In Transit", icon: <FaTruck className="text-blue-500" /> },
+  ]);
+  const [pastShipments, setPastShipments] = useState([
+    { id: "SH010", from: "Kolkata", to: "Jaipur", status: "Completed", icon: <FaCheckCircle className="text-green-500" /> },
+    { id: "SH011", from: "Ahmedabad", to: "Lucknow", status: "Completed", icon: <FaCheckCircle className="text-green-500" /> },
+  ]);
+  const [loadMatches, setLoadMatches] = useState([
+    { shipmentId: "SH001", matchScore: 85, savings: 1200 },
+    { shipmentId: "SH002", matchScore: 70, savings: 900 },
+  ]);
 
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -17,7 +31,7 @@ const MSMEDashboard = () => {
       id: `SH00${shipments.length + pastShipments.length + 1}`,
       from: formData.get("originCity"),
       to: formData.get("destinationCity"),
-      status: "Completed",
+      status: "Pending",
       icon: <FaClock className="text-yellow-500" />,
     };
     setShipments([newShipment, ...shipments]);
@@ -27,21 +41,40 @@ const MSMEDashboard = () => {
   };
 
   useEffect(() => {
-    const updatedShipments = shipments.filter((shipment) => shipment.status !== "Completed");
-    const completedShipments = shipments.filter((shipment) => shipment.status === "Completed");
-    completedShipments.forEach((shipment) => {
-      shipment.icon = <FaCheckCircle className="text-green-500" />;
+    setShipments((prevShipments) => {
+      const updatedShipments = prevShipments.filter((shipment) => shipment.status !== "Completed");
+      const completedShipments = prevShipments.filter((shipment) => shipment.status === "Completed").map(shipment => ({
+        ...shipment,
+        icon: <FaCheckCircle className="text-green-500" />,
+      }));
+  
+      setPastShipments((prevPastShipments) => [...completedShipments, ...prevPastShipments]);
+      return updatedShipments;
     });
-    setShipments(updatedShipments);
-    setPastShipments([...completedShipments, ...pastShipments]);
-    
-    // Remove load matches related to past shipments
-    setLoadMatches(loadMatches.filter(match => updatedShipments.some(shipment => shipment.id === match.shipmentId)));
-  }, [shipments]);
+  
+    setLoadMatches((prevLoadMatches) =>
+      prevLoadMatches.filter(match => shipments.some(shipment => shipment.id === match.shipmentId))
+    );
+  }, []);
+  
+
+
 
   return (
-    <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 bg-[#F6F4F0] min-h-screen text-[#2E5077]">
-      {/* Active Shipments */}
+    <div className="p-6 bg-[#F6F4F0] min-h-screen text-[#2E5077]">
+      {/* Tabs */}
+      <div className="flex mb-4 border-b-2">
+        <button className={`px-4 py-2 ${activeTab === "shipments" ? "border-b-4 border-[#4DA1A9] font-bold" : "text-gray-500"}`} onClick={() => setActiveTab("shipments")}>
+          🚚 Shipments
+        </button>
+        <button className={`px-4 py-2 ml-4 ${activeTab === "community" ? "border-b-4 border-[#4DA1A9] font-bold" : "text-gray-500"}`} onClick={() => setActiveTab("community")}>
+          👥 Community
+        </button>
+      </div>
+
+      {activeTab === "shipments" && (
+        <div className="space-y-6">
+              {/* Active Shipments */}
       <div>
         <h2 className="text-2xl font-bold mb-4 text-[#2E5077]">🚚 Active Shipments</h2>
         <div className="max-h-96 overflow-y-auto space-y-4">
@@ -87,8 +120,8 @@ const MSMEDashboard = () => {
         </div>
       </div>
 
-      {/* Past Shipments Section */}
-      <div className="col-span-1 md:col-span-2">
+
+          <div className="col-span-1 md:col-span-2">
         <h2 className="text-2xl font-bold mb-4 text-[#2E5077]">📜 Past Shipments</h2>
         <div className="max-h-96 overflow-y-auto space-y-4">
           {pastShipments.length === 0 ? (
@@ -111,34 +144,7 @@ const MSMEDashboard = () => {
         </div>
       </div>
 
-      
-     
-      {/* Past Shipments Section */}
-      {/* <div className="col-span-1 md:col-span-2">
-        <h2 className="text-2xl font-bold mb-4 text-[#2E5077]">📜 Past Shipments</h2>
-        <div className="max-h-96 overflow-y-auto space-y-4">
-          {pastShipments.length === 0 ? (
-            <p className="text-[#2E5077] text-lg">No past shipments.</p>
-          ) : (
-            pastShipments.map((shipment) => (
-              <Card key={shipment.id} className="shadow-md rounded-xl border border-gray-400 p-4 bg-gray-200">
-                <CardContent className="flex justify-between items-center">
-                  <div>
-                    <div className="font-semibold text-lg text-gray-800">{shipment.id}</div>
-                    <div className="text-gray-600">{shipment.from} → {shipment.to}</div>
-                    <div className="flex items-center space-x-2 text-gray-800 mt-1">
-                      {shipment.icon} <span className="text-sm">{shipment.status}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          )}
-        </div>
-      </div> */}
-
-      {/* New Shipment Order */}
-      <div className="col-span-1 md:col-span-2">
+          <div className="col-span-1 md:col-span-2">
         <Button className="mb-4 bg-[#4DA1A9] hover:bg-[#2E5077] text-white py-2 px-4 rounded-lg" onClick={() => setShowForm(!showForm)}>
           {showForm ? "Close Form" : "+ New Shipment Order"}
         </Button>
@@ -194,8 +200,22 @@ const MSMEDashboard = () => {
           </Card>
         )}
       </div>
+
+
+
+
+
+
+
+        </div>
+      )}
+
+      {activeTab === "community" && <Community />}
     </div>
   );
 };
 
 export default MSMEDashboard;
+
+
+

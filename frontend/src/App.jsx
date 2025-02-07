@@ -14,7 +14,7 @@ import AdminProfileDashboard from "./components/admin_dashboard/ProfileDashboard
 import LogiProfileDashboard from "./components/logistic_dashboard/ProfileDashboard";
 import LogiHelpDashboard from "./components/logistic_dashboard/HelpDashboard";
 import LogisticsDashboard from "./components/logistic_dashboard/LogisticDashboard";
-
+import AdminMessages from "./components/dashboard/Messages";
 import AdminDashboard from "./components/admin_dashboard/AdminDashboard";
 import Messages from "./components/admin_dashboard/Messages";
 
@@ -38,6 +38,7 @@ function App() {
             <Route path="msme" element={<MSMEDashboard />} />
             <Route path="profile" element={<ProfileDashboard />} />
             <Route path="help" element={<HelpDashboard />} />
+            <Route path="msmeMessages" element={<AdminMessages />} />
           </Route>
         </Route>
 
@@ -54,7 +55,7 @@ function App() {
          <Route path="" element={<AdminPage />} >
            <Route path="admin" element={<AdminDashboard />} />
            <Route path="adminprofile" element={<AdminProfileDashboard />} />
-           <Route path="messages" element={<Messages />} />
+           <Route path="Messages" element={<Messages />} />
          </Route>
         </Route>
       
