@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  FaQuestionCircle,
-  FaPhone,
-  FaEnvelope,
-  FaPaperPlane,
-} from "react-icons/fa";
+import { FaQuestionCircle, FaPhone, FaEnvelope, FaPaperPlane } from "react-icons/fa";
 import { getFAQs, getContactInfo, sendMessage } from "../api/help";
 
 const HelpDashboard = () => {
@@ -55,9 +50,7 @@ const HelpDashboard = () => {
       </h2>
 
       {/* FAQs Section */}
-      <h3 className="text-lg font-semibold mb-2 text-[#2E5077]">
-        📌 Frequently Asked Questions
-      </h3>
+      <h3 className="text-lg font-semibold mb-2 text-[#2E5077]">📌 Frequently Asked Questions</h3>
       <ul className="list-disc pl-5 space-y-2 text-[#2E5077]">
         {faqs.length > 0 ? (
           faqs.map((faq, index) => (
@@ -71,9 +64,7 @@ const HelpDashboard = () => {
       </ul>
 
       {/* Contact Support Section */}
-      <h3 className="text-lg font-semibold mt-6 text-[#2E5077]">
-        📞 Contact Support
-      </h3>
+      <h3 className="text-lg font-semibold mt-6 text-[#2E5077]">📞 Contact Support</h3>
       <div className="flex items-center space-x-3 text-[#2E5077]">
         <FaPhone className="text-[#4DA1A9]" />
         <span>{contact.phone || "+91 12345 67890"}</span>
@@ -84,9 +75,7 @@ const HelpDashboard = () => {
       </div>
 
       {/* Send Message Section */}
-      <h3 className="text-lg font-semibold mt-6 text-[#2E5077]">
-        💬 Send us your question
-      </h3>
+      <h3 className="text-lg font-semibold mt-6 text-[#2E5077]">💬 Send us your question</h3>
       <div className="flex mt-2">
         <input
           type="text"
